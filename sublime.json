@@ -1,0 +1,14 @@
+{
+    "color_scheme": "Packages/Dracula Color Scheme/Dracula.tmTheme",
+    "create_window_at_startup": false,
+    "default_line_ending": "unix",
+    "dpi_scale": 10,
+    "font_size": 12,
+    "ignored_packages":
+    [
+        "Vintage"
+    ],
+    "tab_size": 4,
+    "theme": "Default.sublime-theme",
+    "translate_tabs_to_spaces": true
+}

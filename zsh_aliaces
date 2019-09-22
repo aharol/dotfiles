@@ -1,0 +1,27 @@
+alias rm='rm -i'
+alias cp='cp -i'
+alias mv='mv -i'
+alias ..='cd ..'
+alias cls='clear'
+
+# Default to human readable figures
+alias df='df -h'
+alias du='du -h'
+
+# Misc :)
+alias less='less -r'                          # raw control characters
+alias whence='type -a'                        # where, of a sort
+alias grep='grep --color'                     # show differences in colour
+alias egrep='egrep --color=auto'              # show differences in colour
+alias fgrep='fgrep --color=auto'              # show differences in colour
+
+alias ll='ls -lh'
+alias la='ls -lha'
+
+alias ghci='ghci-color'
+
+alias vim='/usr/local/bin/nvim'
+alias vi=vim
+
+alias myawsiotp='oathtool --totp --base32 46MRBTXPLTRWP2IFZA47AA3EVA'
+alias ic='cd ~/Library/Mobile\ Documents/com~apple~CloudDocs'
