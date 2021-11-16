@@ -17,18 +17,14 @@ Plug 'ctrlpvim/ctrlp.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'easymotion/vim-easymotion'
 Plug 'benmills/vimux'
-" Plug 'morhetz/gruvbox'
-Plug 'dracula/vim'
-Plug 'rodjek/vim-puppet'
-Plug 'kchmck/vim-coffee-script'
+Plug 'arzg/vim-colors-xcode'
 Plug 'airblade/vim-gitgutter'
 Plug 'rizzatti/dash.vim'
 Plug 'parsonsmatt/intero-neovim'
 Plug 'neovimhaskell/haskell-vim'
 Plug 'Twinside/vim-hoogle'
-Plug 'derekwyatt/vim-scala'
+Plug 'terryma/vim-multiple-cursors'
 Plug 'kien/rainbow_parentheses.vim'
-Plug 'guns/vim-clojure-static'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'junegunn/vim-easy-align'
@@ -37,32 +33,12 @@ Plug 'ryanoasis/vim-devicons'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'wikitopian/hardmode'
 Plug 'w0ng/vim-hybrid'
-Plug 'Valloric/MatchTagAlways'
 Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'Chiel92/vim-autoformat'
-Plug 'fatih/vim-go'
-Plug 'zchee/deoplete-go', {'build': {'unix': 'make'}}
-Plug 'jodosha/vim-godebug'
-
-" ===================================================================
-" Scheme language
-" Plug 'Olical/vim-scheme', { 'for': 'scheme', 'on': 'SchemeConnect' }
-" You'll need vim-sexp too for selecting forms.
-Plug 'guns/vim-sexp'
-" And while you're here, tpope's bindings make vim-sexp a little nicer to use.
-Plug 'tpope/vim-sexp-mappings-for-regular-people'
-" ===================================================================
-
-
-
-let g:go_fmt_command = "goimports"
-let g:go_addtags_transform = "snakecase"
-let g:go_auto_sameids = 1
-let g:go_auto_type_info = 1
-
-Plug 'godoctor/godoctor.vim'
+Plug 'JuliaEditorSupport/julia-vim'
 Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': './install.sh' }
+Plug 'eagletmt/neco-ghc'
 
 let g:LanguageClient_rootMarkers = ['*.cabal', 'stack.yaml']
 set rtp+=~/.vim/plugged/LanguageClient-neovim
@@ -71,18 +47,6 @@ let g:LanguageClient_serverCommands = { 'haskell': ['hie-wrapper'] }
 function! DoRemote(arg)
     UpdateRemotePlugins
 endfunction
-
-if has('nvim')
-    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-    Plug 'Shougo/deoplete.nvim'
-    Plug 'roxma/nvim-yarp'
-    Plug 'roxma/vim-hug-neovim-rpc'
-endif
-let g:deoplete#enable_at_startup = 1
-
-Plug 'eagletmt/neco-ghc'
-
 
 " All of your Plugs must be added before the following line
 call plug#end()              " required
@@ -94,7 +58,7 @@ call plug#end()              " required
 autocmd! BufWritePost * Neomake
 
 " Nerdtree git plugin symbols
-let g:NERDTreeIndicatorMapCustom = {
+let g:NERDTreeGitStatusIndicatorMapCustom = {
             \ "Modified"  : "ᵐ",
             \ "Staged"    : "ˢ",
             \ "Untracked" : "ᵘ",
@@ -106,7 +70,8 @@ let g:NERDTreeIndicatorMapCustom = {
             \ "Unknown"   : "?"
             \ }
 
-let NERDTreeMapOpenInTab='\r'
+let g:NERDTreeMapOpenInTab='\r'
+let g:NERDTreeHighlightCursorline=0
 
 " Gitgutter show more signs
 let g:gitgutter_max_signs = 1500
@@ -168,34 +133,40 @@ noremap <Right> <NOP>
 map <C-F> :NERDTreeToggle<CR>
 
 " Other options
-set relativenumber
+" set relativenumber
 set number
 let mapleader=','
 set backspace=2
 
 set termguicolors
+set background=light        " for the light version
 
-set background=dark        " for the light version
-let g:airline_theme='dracula'
-" let g:airline_theme='gruvbox'
-let g:one_allow_italics = 1 " I love italic for comments
-colorscheme dracula
-" colorscheme gruvbox
+colorscheme xcodelighthc
+let g:airline_theme='xcodelighthc'
+let g:xcodelighthc_emph_types=1
+let g:xcodelighthc_emph_funcs=1
+let g:xcodelighthc_emph_idents=1
+let g:xcodelighthc_match_paren_style=1
+let g:xcodelighthc_green_comments=1
 
-syntax on
+augroup vim-colors-xcode
+    autocmd!
+augroup END
+
+autocmd vim-colors-xcode ColorScheme * hi Comment        cterm=italic gui=italic
+autocmd vim-colors-xcode ColorScheme * hi SpecialComment cterm=italic gui=italic
+
 set shell=/bin/zsh
 set laststatus=2
 set noshowmode
 
+syntax on
+highlight lineNr term=bold cterm=none ctermbg=none ctermfg=none gui=bold
 set cursorline
+highlight CursorLine term=bold cterm=none ctermbg=none ctermfg=none gui=bold
+highlight CursorLineNr term=bold cterm=none ctermbg=none ctermfg=yellow gui=bold
 
 set splitbelow
-
-syntax on
-
-" Draw a line at 80 columns
-set colorcolumn=120
-highlight ColorColumn ctermbg=235 guibg=#2c2d27
 
 " Check the function above, these
 " are my default values
