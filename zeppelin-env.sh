@@ -17,7 +17,7 @@
 #
 export ZEPPELIN_PORT=8080
 
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk/Contents/Home
+export JAVA_HOME=$(/usr/libexec/java_home)
 
 export SPARK_HOME=/usr/local/lib/spark
 export CLASSPATH=$CLASSPATH:$SPARK_HOME/jars:$SPARK_HOME/external
