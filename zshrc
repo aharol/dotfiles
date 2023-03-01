@@ -95,7 +95,7 @@ eval $(ssh-add -K $SSH_KEY_PATH/id_rsa &> /dev/null)
 # For a full list of active aliases, run `alias`.
 #
 # Example aliases
-source $HOME/.zsh_aliases
+source $HOME/.zsh_aliaces
 #source /usr/local/bin/aws_zsh_completer.sh
 
 export EDITOR="/usr/local/bin/nvim"
