@@ -23,5 +23,4 @@ alias ghci='ghci-color'
 alias vim='/usr/local/bin/nvim'
 alias vi=vim
 
-alias myawsiotp='oathtool --totp --base32 46MRBTXPLTRWP2IFZA47AA3EVA'
-alias ic='cd ~/Library/Mobile\ Documents/com~apple~CloudDocs'
+alias brew='env PATH="${PATH//$(pyenv root)\/shims:/}" brew'

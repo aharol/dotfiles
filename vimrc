@@ -17,7 +17,8 @@ Plug 'ctrlpvim/ctrlp.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'easymotion/vim-easymotion'
 Plug 'benmills/vimux'
-Plug 'arzg/vim-colors-xcode'
+" Plug 'arzg/vim-colors-xcode'
+Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'airblade/vim-gitgutter'
 Plug 'rizzatti/dash.vim'
 Plug 'parsonsmatt/intero-neovim'
@@ -139,22 +140,23 @@ let mapleader=','
 set backspace=2
 
 set termguicolors
-set background=light        " for the light version
+set background=dark        " for the light version
 
-colorscheme xcodelighthc
-let g:airline_theme='xcodelighthc'
-let g:xcodelighthc_emph_types=1
-let g:xcodelighthc_emph_funcs=1
-let g:xcodelighthc_emph_idents=1
-let g:xcodelighthc_match_paren_style=1
-let g:xcodelighthc_green_comments=1
-
-augroup vim-colors-xcode
-    autocmd!
-augroup END
-
-autocmd vim-colors-xcode ColorScheme * hi Comment        cterm=italic gui=italic
-autocmd vim-colors-xcode ColorScheme * hi SpecialComment cterm=italic gui=italic
+colorscheme dracula
+let g:airline_theme='dracula'
+" let g:airline_theme='xcodelighthc'
+" let g:xcodelighthc_emph_types=1
+" let g:xcodelighthc_emph_funcs=1
+" let g:xcodelighthc_emph_idents=1
+" let g:xcodelighthc_match_paren_style=1
+" let g:xcodelighthc_green_comments=1
+"
+" augroup vim-colors-xcode
+"     autocmd!
+" augroup END
+"
+" autocmd vim-colors-xcode ColorScheme * hi Comment        cterm=italic gui=italic
+" autocmd vim-colors-xcode ColorScheme * hi SpecialComment cterm=italic gui=italic
 
 set shell=/bin/zsh
 set laststatus=2
