@@ -18,9 +18,15 @@ alias fgrep='fgrep --color=auto'              # show differences in colour
 alias ll='ls -lh'
 alias la='ls -lha'
 
-alias ghci='ghci-color'
+# alias ghci='ghci-color'
 
-alias vim='/usr/local/bin/nvim'
-alias vi=vim
+# alias vim=lvim
+# alias vi=lvim
 
-alias brew='env PATH="${PATH//$(pyenv root)\/shims:/}" brew'
+alias ic="cd $HOME/Library/Mobile\ Documents/com\~apple\~CloudDocs"
+
+alias docker="podman"
+
+# alias python="python3"
+# alias pip="pip3"
+# alias brew='env PATH="${PATH//$(pyenv root)\/shims:/}" brew'
