@@ -14,6 +14,23 @@ config.unix_domains = {
 }
 config.default_gui_startup_args = { "connect", "unix" }
 
+-- Base color defaults so the first mux-attached window isn't black when
+-- `window:get_appearance()` hasn't resolved yet at window-create time.
+-- Pick the initial scheme from OS appearance at config-load time; the
+-- `window-config-reloaded` hook below still flips this live on changes.
+local function initial_appearance()
+	if wezterm.gui then
+		return wezterm.gui.get_appearance()
+	end
+	return "Dark"
+end
+
+if initial_appearance():find("Dark") then
+	config.color_scheme = "Catppuccin Mocha"
+else
+	config.color_scheme = "Catppuccin Latte"
+end
+
 -- Latte overrides: Latte's defaults are too pastel for dense terminal text
 -- (italics/links render as washed-out lavender). Override ansi/brights with
 -- saturated Catppuccin values, and force the default foreground to Latte
@@ -51,6 +68,12 @@ local latte_colors = {
 -- Apply appearance per-window via the live window context. This is reliable
 -- under macOS Auto appearance, whereas wezterm.gui.get_appearance() at
 -- config-load time returns "Light" before the GUI has resolved.
+-- Apply latte overrides as the base only when starting in Light mode,
+-- so the base `config.colors` matches the initial `config.color_scheme`.
+if not initial_appearance():find("Dark") then
+	config.colors = latte_colors
+end
+
 wezterm.on("window-config-reloaded", function(window, _pane)
 	local overrides = window:get_config_overrides() or {}
 	local appearance = window:get_appearance()

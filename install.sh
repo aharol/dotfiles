@@ -24,6 +24,7 @@ links=(
   "git/gitignore_global       | $HOME/.gitignore_global"
   "gh/config.yml              | $HOME/.config/gh/config.yml"
   "claude/settings.json       | $HOME/.claude/settings.json"
+  "launchagents/com.wezterm.mux-server.plist | $HOME/Library/LaunchAgents/com.wezterm.mux-server.plist"
 )
 
 stamp=$(date +%Y%m%d-%H%M%S)
@@ -100,4 +101,6 @@ Post-install reminders:
   • In a tmux session, fetch plugins:   prefix + I  (capital i)
   • First nvim launch will bootstrap Lazy.nvim and install plugins from lazy-lock.json
   • Copy .env.example → ~/.env and fill in any secrets (GitHub PAT, OpenAI keys, etc.)
+  • Load the WezTerm mux launch agent:
+      launchctl load -w ~/Library/LaunchAgents/com.wezterm.mux-server.plist
 POST

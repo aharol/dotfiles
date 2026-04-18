@@ -16,6 +16,7 @@ repo, changes are live immediately.
 ├── git/          .gitconfig + global gitignore
 ├── gh/           GitHub CLI config
 ├── claude/       Claude Code settings
+├── launchagents/ macOS LaunchAgents (WezTerm mux-server)
 ├── Brewfile      `brew bundle install` to restore packages
 ├── .env.example  Template for secrets sourced into the shell
 └── install.sh    Symlink deployer (idempotent, --dry-run supported)
