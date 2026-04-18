@@ -17,6 +17,12 @@ vim.api.nvim_create_autocmd({ "FocusGained", "VimResume" }, {
   callback = sync_background,
 })
 
+local uv = vim.uv or vim.loop
+local appearance_timer = uv.new_timer()
+if appearance_timer then
+  appearance_timer:start(2000, 2000, vim.schedule_wrap(sync_background))
+end
+
 vim.opt.autoread = true
 
 vim.api.nvim_create_autocmd({ "FocusGained", "TermClose", "TermLeave", "BufEnter", "CursorHold", "CursorHoldI" }, {
