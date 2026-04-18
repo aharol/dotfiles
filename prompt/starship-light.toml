@@ -1,0 +1,82 @@
+# Starship prompt — LIGHT variant. Dark variant lives at starship.toml.
+# A precmd hook in ~/.zshrc sets $STARSHIP_CONFIG to the right file based on macOS appearance.
+
+palette = "catppuccin_latte"
+
+format = """
+$directory\
+$git_branch\
+$git_status\
+$python\
+$nodejs\
+$rust\
+$golang\
+$cmd_duration\
+$line_break\
+$character"""
+
+[character]
+success_symbol = "[❯](bold green)"
+error_symbol = "[❯](bold red)"
+vicmd_symbol = "[❮](bold green)"
+
+[directory]
+style = "bold blue"
+truncation_length = 3
+truncate_to_repo = true
+read_only = " 󰌾"
+
+[git_branch]
+symbol = " "
+style = "bold purple"
+
+[git_status]
+style = "bold yellow"
+ahead = "⇡${count}"
+behind = "⇣${count}"
+diverged = "⇕⇡${ahead_count}⇣${behind_count}"
+modified = "!${count}"
+staged = "+${count}"
+untracked = "?${count}"
+
+[cmd_duration]
+min_time = 2000
+style = "bold yellow"
+format = "[ $duration]($style)"
+
+[python]
+symbol = " "
+style = "bold green"
+
+[nodejs]
+symbol = " "
+style = "bold green"
+
+[rust]
+symbol = " "
+style = "bold red"
+
+[golang]
+symbol = " "
+style = "bold cyan"
+
+# --- Palettes -----------------------------------------------------------------
+# Catppuccin Mocha (dark)
+[palettes.catppuccin_mocha]
+blue = "#89b4fa"
+green = "#a6e3a1"
+red = "#f38ba8"
+yellow = "#f9e2af"
+purple = "#cba6f7"
+cyan = "#94e2d5"
+orange = "#fab387"
+
+# Catppuccin Latte (light)
+[palettes.catppuccin_latte]
+blue = "#1e66f5"
+green = "#40a02b"
+red = "#d20f39"
+yellow = "#df8e1d"
+purple = "#8839ef"
+cyan = "#179299"
+orange = "#fe640b"

@@ -1,0 +1,34 @@
+# Git per-user config. Symlinked to ~/.gitconfig.
+
+[user]
+	name  = Art Harol
+	email = art.harol@icloud.com
+
+[init]
+	defaultBranch = main
+
+[core]
+	excludesfile = ~/.gitignore_global
+	editor       = nvim
+	pager        = less -FRX
+
+[pull]
+	rebase = false
+
+[push]
+	default       = current
+	autoSetupRemote = true
+
+[fetch]
+	prune = true
+
+[diff]
+	algorithm = histogram
+	colorMoved = default
+
+[merge]
+	conflictStyle = zdiff3
+
+# Always speak SSH to GitHub even when a remote was added as https://
+[url "git@github.com:"]
+	insteadOf = https://github.com/

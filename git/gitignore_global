@@ -1,0 +1,40 @@
+# ~/.gitignore_global — applied to every repo on this machine.
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Editor cruft
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+.cursor/
+*.code-workspace
+
+# Direnv / env
+.envrc.local
+.env.local
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Node
+node_modules/
+.npm/
+
+# Logs / tmp
+*.log
+tmp/
+temp/

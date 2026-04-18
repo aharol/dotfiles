@@ -1,0 +1,31 @@
+# --- Secrets ---
+.env
+
+# --- install.sh backups ---
+*.backup
+*.backup.*
+*.backup-*
+
+# --- macOS ---
+.DS_Store
+._*
+.AppleDouble
+.LSOverride
+.Spotlight-V100
+.Trashes
+
+# --- nvim runtime state (we track lazy-lock.json but not these) ---
+nvim/lazy-lock.json.bak
+nvim/.luarc-cache.json
+nvim/.spell/
+
+# --- editor cruft ---
+*.swp
+*.swo
+*~
+\#*\#
+
+# --- logs / tmp ---
+*.log
+tmp/
+temp/
