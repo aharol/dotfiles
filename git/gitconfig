@@ -1,34 +1,8 @@
-# Git per-user config. Symlinked to ~/.gitconfig.
-
+# This is Git's per-user configuration file.
 [user]
-	name  = Art Harol
-	email = art.harol@icloud.com
-
-[init]
-	defaultBranch = main
-
-[core]
-	excludesfile = ~/.gitignore_global
-	editor       = nvim
-	pager        = less -FRX
-
-[pull]
-	rebase = false
-
-[push]
-	default       = current
-	autoSetupRemote = true
-
-[fetch]
-	prune = true
-
-[diff]
-	algorithm = histogram
-	colorMoved = default
-
-[merge]
-	conflictStyle = zdiff3
-
-# Always speak SSH to GitHub even when a remote was added as https://
+	name = Art Harol
+# Please adapt and uncomment the following lines:
+#	name = Art Harol
+#	email = art.harol@concordia.com.au
 [url "git@github.com:"]
 	insteadOf = https://github.com/

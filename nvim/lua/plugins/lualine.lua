@@ -14,7 +14,8 @@ return {
     end
 
     local function build_theme()
-      local t = require "lualine.themes.catppuccin"
+      local flavour = is_light() and "catppuccin-latte" or "catppuccin-mocha"
+      local t = require("lualine.themes." .. flavour)
       t.normal.c.bg = is_light() and "#ccd0da" or "#313244"
       return t
     end

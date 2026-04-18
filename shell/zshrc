@@ -238,5 +238,5 @@ bindkey '^[[B' history-search-forward
 
 source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
-# aliases
-source $HOME/.zsh_aliases
+# aliaces
+source $HOME/.zsh_aliaces
