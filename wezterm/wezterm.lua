@@ -6,6 +6,14 @@ local config = wezterm.config_builder()
 
 -- This is where you actually apply your config choices
 
+-- Local multiplexer: panes/tabs live in a background `wezterm-mux-server` so
+-- closing the GUI detaches rather than kills. Reattach with `wezterm connect
+-- unix` or just by launching WezTerm again.
+config.unix_domains = {
+	{ name = "unix" },
+}
+config.default_gui_startup_args = { "connect", "unix" }
+
 -- Latte overrides: Latte's defaults are too pastel for dense terminal text
 -- (italics/links render as washed-out lavender). Override ansi/brights with
 -- saturated Catppuccin values, and force the default foreground to Latte

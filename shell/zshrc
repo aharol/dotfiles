@@ -238,5 +238,17 @@ bindkey '^[[B' history-search-forward
 
 source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
+# --- Zellij (OS-appearance aware) ---
+# Picks Catppuccin Latte/Mocha based on macOS appearance at launch time.
+# Existing sessions keep their original theme — zellij can't hot-swap.
+zj() {
+  local theme="catppuccin-mocha"
+  if ! defaults read -g AppleInterfaceStyle 2>/dev/null | grep -q Dark; then
+    theme="catppuccin-latte"
+  fi
+  command zellij options --theme "$theme"
+  command zellij "$@"
+}
+
 # aliaces
 source $HOME/.zsh_aliaces

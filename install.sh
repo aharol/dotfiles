@@ -17,6 +17,7 @@ links=(
   "prompt/starship-light.toml | $HOME/.config/starship-light.toml"
   "tmux/tmux.conf             | $HOME/.tmux.conf"
   "wezterm/wezterm.lua        | $HOME/.wezterm.lua"
+  "zellij/config.kdl          | $HOME/.config/zellij/config.kdl"
   "iterm2/DynamicProfiles     | $HOME/Library/Application Support/iTerm2/DynamicProfiles"
   "nvim                       | $HOME/.config/nvim"
   "git/gitconfig              | $HOME/.gitconfig"
