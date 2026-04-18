@@ -1,8 +1,6 @@
 # This is Git's per-user configuration file.
 [user]
 	name = Art Harol
-# Please adapt and uncomment the following lines:
-#	name = Art Harol
-#	email = art.harol@concordia.com.au
+	email = art.harol@ambit-systems.com
 [url "git@github.com:"]
 	insteadOf = https://github.com/
