@@ -90,6 +90,10 @@ end)
 config.font = wezterm.font("Hack Nerd Font Mono")
 config.font_size = 12
 
+-- Force GPU-accelerated renderer (Metal on macOS via WebGpu).
+config.front_end = "WebGpu"
+config.webgpu_power_preference = "HighPerformance"
+
 config.enable_tab_bar = true
 
 config.initial_rows = 48
