@@ -252,3 +252,15 @@ zj() {
 
 # aliaces
 source $HOME/.zsh_aliaces
+
+# --- pdfpc wrapper ---
+# Homebrew pdfpc on macOS needs: (1) /opt/homebrew/lib on the dyld fallback
+# path for bare-name typelib lookups, (2) an ephemeral D-Bus session bus
+# (macOS has none by default) using a unix-socket config since the homebrew
+# session.conf hardcodes a launchd listener. libgstgtk4.dylib has also been
+# renamed to .disabled to avoid loading GTK4 into this GTK3 app.
+pdfpc() {
+  DYLD_FALLBACK_LIBRARY_PATH="/opt/homebrew/lib:$DYLD_FALLBACK_LIBRARY_PATH" \
+    dbus-run-session --config-file="$HOME/.config/dbus-1/session.conf" -- \
+    /opt/homebrew/bin/pdfpc "$@"
+}
