@@ -90,11 +90,11 @@ end)
 config.font = wezterm.font("Hack Nerd Font Mono")
 config.font_size = 12
 
--- Force GPU-accelerated renderer (Metal on macOS via WebGpu).
-config.front_end = "WebGpu"
-config.webgpu_power_preference = "HighPerformance"
+-- Force GPU-accelerated renderer (OpenGL → Metal on macOS).
+-- WebGpu leaves white artifacts in newly exposed areas on window resize.
+config.front_end = "OpenGL"
 
-config.enable_tab_bar = true
+config.enable_tab_bar = false
 
 config.initial_rows = 48
 config.initial_cols = 150
