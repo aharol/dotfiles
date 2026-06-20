@@ -6,13 +6,16 @@ local config = wezterm.config_builder()
 
 -- This is where you actually apply your config choices
 
--- Local multiplexer: panes/tabs live in a background `wezterm-mux-server` so
--- closing the GUI detaches rather than kills. Reattach with `wezterm connect
--- unix` or just by launching WezTerm again.
+-- Keep a local mux domain available for manual attach/resume.
+-- Make GUI auto-connect opt-in so the default startup path stays simple for
+-- interactive TUIs. Reattach manually with `wezterm connect unix`, or launch
+-- with `WEZTERM_CONNECT_MUX_ON_START=1`.
 config.unix_domains = {
 	{ name = "unix" },
 }
-config.default_gui_startup_args = { "connect", "unix" }
+if os.getenv("WEZTERM_CONNECT_MUX_ON_START") == "1" then
+	config.default_gui_startup_args = { "connect", "unix" }
+end
 
 -- Base color defaults so the first mux-attached window isn't black when
 -- `window:get_appearance()` hasn't resolved yet at window-create time.
@@ -88,11 +91,15 @@ wezterm.on("window-config-reloaded", function(window, _pane)
 end)
 
 config.font = wezterm.font("Hack Nerd Font Mono")
-config.font_size = 12
+config.font_size = 11.5
 
 -- Force GPU-accelerated renderer (OpenGL → Metal on macOS).
 -- WebGpu leaves white artifacts in newly exposed areas on window resize.
 config.front_end = "OpenGL"
+
+-- Quote dropped paths conservatively so dragging files into shells/TUIs yields
+-- a usable path even when names contain spaces or shell metacharacters.
+config.quote_dropped_files = "Posix"
 
 config.enable_tab_bar = false
 

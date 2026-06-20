@@ -71,7 +71,9 @@ $EDITOR ~/.env
   continuum. Truecolor caps (`RGB` + `Tc`) set so apps inside tmux render with
   full 24-bit colour.
 - **WezTerm** — terminal emulator. Same dual-Catppuccin pattern as Starship,
-  driven by `wezterm.gui.get_appearance()`.
+  driven by `wezterm.gui.get_appearance()`. A local mux domain is available for
+  manual attach with `wezterm connect unix`; GUI windows only auto-connect when
+  launched with `WEZTERM_CONNECT_MUX_ON_START=1`.
 - **Neovim (AstroNvim)** — editor. Lazy.nvim, Mason-managed LSPs, conform.nvim
   formatting, nvim-lint linting, Catppuccin colourscheme that follows macOS
   appearance via a `precmd` autocommand in `lua/polish.lua`.
