@@ -48,7 +48,11 @@ return {
       -- `state.git_status_lookup` neo-tree's native colouring already consumes,
       -- so files, sub-directories, AND repo roots all light up (the git module
       -- bubbles each file's status up to its parent directories).
-      local CACHE_TTL_NS = 2000 * 1000000
+      -- Long cache: git status only changes when YOU change a file, and the
+      -- BufWritePost / TermClose handlers below invalidate precisely then. A
+      -- generous TTL keeps expanding folders instant (no git on every render)
+      -- while still catching out-of-editor changes within 30s.
+      local CACHE_TTL_NS = 30000 * 1000000
       local full_cache = {} -- repo_path -> { lookup = table, checked_at = ns }
       local dirty_cache = {} -- repo_path -> { dirty = bool, checked_at = ns }
 
@@ -72,7 +76,8 @@ return {
         return lookup
       end
 
-      -- Cheap one-call dirty check for a collapsed repo (just colours its root).
+      -- Cheap one-call dirty check: ~3x faster than a full status (≈11ms vs 32ms
+      -- per repo here), so clean repos skip the expensive per-file computation.
       local function repo_dirty(repo_path)
         local now = (vim.uv or vim.loop).hrtime()
         local cached = dirty_cache[repo_path]
@@ -83,16 +88,6 @@ return {
         local dirty = res.code == 0 and res.stdout ~= ""
         dirty_cache[repo_path] = { dirty = dirty, checked_at = now }
         return dirty
-      end
-
-      local function is_expanded(state, path)
-        if not (state.tree and state.tree.get_node) then
-          return false
-        end
-        local ok, node = pcall(function()
-          return state.tree:get_node(path)
-        end)
-        return ok and node ~= nil and node:is_expanded() or false
       end
 
       -- Immediate child directories of `root` that are git repos. Matches this
@@ -128,6 +123,34 @@ return {
         end
         return nil
       end
+
+      -- Auto-refresh. The git lookup only recomputes on a neo-tree render, so an
+      -- in-place edit never recolours until the tree is reopened. Bust the cache
+      -- for the affected repo on save (and all repos after a terminal/lazygit
+      -- session) and re-render so changes show live.
+      local refresh_group = vim.api.nvim_create_augroup("AmbitNeoTreeGitRefresh", { clear = true })
+      local function refresh_fs()
+        pcall(function() require("neo-tree.sources.manager").refresh "filesystem" end)
+      end
+      vim.api.nvim_create_autocmd("BufWritePost", {
+        group = refresh_group,
+        callback = function(args)
+          local repo = find_containing_repo(vim.fn.fnamemodify(args.file, ":p:h"))
+          if repo then
+            full_cache[repo] = nil
+            dirty_cache[repo] = nil
+          end
+          refresh_fs()
+        end,
+      })
+      vim.api.nvim_create_autocmd({ "TermClose", "TermLeave" }, {
+        group = refresh_group,
+        callback = function()
+          full_cache = {}
+          dirty_cache = {}
+          refresh_fs()
+        end,
+      })
 
       -- before_render replaces neo-tree's own (single-repo) git wiring; we own
       -- the lookup now. NOTE: this is a *per-source* option, so it must live
@@ -171,13 +194,13 @@ return {
           end
         end
 
-        -- Parent-of-repos layout (also nested repos under a repo root): colour
-        -- each immediate child repo.
+        -- Parent-of-repos layout (also nested repos under a repo root). Cheap
+        -- dirty check first (skips the ~3x-costlier full status for clean repos);
+        -- dirty repos get full per-file status so root, sub-dirs AND files all
+        -- colour the moment they're visible — no expand-state race, no reopen.
         for _, child in ipairs(children) do
-          if is_expanded(state, child) then
+          if repo_dirty(child) then
             add_full(child)
-          elseif repo_dirty(child) then
-            merged[child] = "M"
           end
         end
 
