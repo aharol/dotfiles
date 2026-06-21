@@ -1,45 +1,7 @@
--- Work around a Neovim 0.12 core treesitter crash on markdown files with
--- fenced code blocks: nvim-treesitter (archived master) ships a markdown
--- `injections` query using the custom `#set-lang-from-info-string!` directive,
--- which is incompatible with nvim 0.12's injection range handling and throws
--- "attempt to call method 'range' (a nil value)". We replace it with the modern
--- query (standard `@injection.language` capture), which keeps code-block /
--- frontmatter / inline highlighting and does not crash. See neovim#39032.
-local function fix_markdown_injections()
-  pcall(
-    vim.treesitter.query.set,
-    "markdown",
-    "injections",
-    [[
-(fenced_code_block
-  (info_string
-    (language) @injection.language)
-  (code_fence_content) @injection.content)
-
-((html_block) @injection.content
-  (#set! injection.language "html")
-  (#set! injection.combined)
-  (#set! injection.include-children))
-
-((minus_metadata) @injection.content
-  (#set! injection.language "yaml")
-  (#offset! @injection.content 1 0 -1 0)
-  (#set! injection.include-children))
-
-((plus_metadata) @injection.content
-  (#set! injection.language "toml")
-  (#offset! @injection.content 1 0 -1 0)
-  (#set! injection.include-children))
-
-([
-  (inline)
-  (pipe_table_cell)
-] @injection.content
-  (#set! injection.language "markdown_inline"))
-]]
-  )
-end
-fix_markdown_injections()
+-- (Removed the markdown treesitter-injection workaround: nvim-treesitter's
+-- `main` branch fixes injection handling natively on Neovim 0.12, so the
+-- master-era `#set-lang-from-info-string!` crash no longer applies. The branch
+-- migration lives in lua/plugins/treesitter.lua.)
 
 local function detect_macos_appearance()
   local handle = io.popen("defaults read -g AppleInterfaceStyle 2>/dev/null")
