@@ -6,16 +6,15 @@ local config = wezterm.config_builder()
 
 -- This is where you actually apply your config choices
 
--- Keep a local mux domain available for manual attach/resume.
--- Make GUI auto-connect opt-in so the default startup path stays simple for
--- interactive TUIs. Reattach manually with `wezterm connect unix`, or launch
--- with `WEZTERM_CONNECT_MUX_ON_START=1`.
+-- Keep a local mux domain available for attach/resume.
 config.unix_domains = {
 	{ name = "unix" },
 }
-if os.getenv("WEZTERM_CONNECT_MUX_ON_START") == "1" then
-	config.default_gui_startup_args = { "connect", "unix" }
-end
+-- Always reattach to the persistent mux on launch (tmux-like). Reading the arg
+-- from the config file (rather than gating on WEZTERM_CONNECT_MUX_ON_START)
+-- means Dock/Spotlight launches reattach too, not just terminal-spawned ones.
+-- Use Cmd+N (see config.keys) for a fresh local shell that bypasses the mux.
+config.default_gui_startup_args = { "connect", "unix" }
 
 -- Base color defaults so the first mux-attached window isn't black when
 -- `window:get_appearance()` hasn't resolved yet at window-create time.
@@ -125,6 +124,12 @@ config.keys = {
 		key = "Enter",
 		mods = "SHIFT",
 		action = act.SendString("\n"),
+	},
+	-- Cmd+N: fresh LOCAL shell window, bypassing the persistent mux.
+	{
+		key = "n",
+		mods = "CMD",
+		action = act.SpawnCommandInNewWindow({ domain = { DomainName = "local" } }),
 	},
 	-- -- Control+` to toggle (hide) the terminal
 	-- {
