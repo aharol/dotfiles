@@ -264,3 +264,11 @@ pdfpc() {
     dbus-run-session --config-file="$HOME/.config/dbus-1/session.conf" -- \
     /opt/homebrew/bin/pdfpc "$@"
 }
+
+# --- Claude Code: disable terminal mouse reporting ---
+# Claude Code enables SGR mouse tracking (clickable paths, scroll), which makes
+# the terminal hand drags to the app instead of selecting text — so plain
+# click-drag copy stops working in WezTerm without holding Shift. Setting this
+# (read as defined-at-all) turns mouse reporting off and restores normal mouse
+# select/copy. Trade-off: no click-to-open paths, scroll via the terminal.
+export CLAUDE_CODE_DISABLE_MOUSE=1
