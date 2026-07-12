@@ -1,13 +1,12 @@
 {
   "skillListingBudgetFraction": 0.02,
+  "model": "opus[1m]",
   "enabledPlugins": {
     "lua-lsp@claude-plugins-official": true,
     "frontend-design@claude-plugins-official": true,
     "agent-skills@addy-agent-skills": true,
     "academic-research-skills@academic-research-skills": true,
-    "legalzoom@claude-plugins-official": true,
     "claude-code-setup@claude-plugins-official": true,
-    "design@knowledge-work-plugins": true,
     "superpowers@claude-plugins-official": true,
     "playground@claude-plugins-official": true,
     "playwright@claude-plugins-official": true
@@ -33,8 +32,8 @@
     }
   },
   "effortLevel": "high",
+  "tui": "default",
   "skipWorkflowUsageWarning": true,
   "theme": "auto",
-  "skipAutoPermissionPrompt": true,
-  "tui": "fullscreen"
+  "skipAutoPermissionPrompt": true
 }
