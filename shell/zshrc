@@ -216,6 +216,20 @@ export PATH=/Users/artharol/.opencode/bin:$PATH
 export BUN_INSTALL="$HOME/Library/Application Support/reflex/bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
+# --- Perl local::lib (cpanm) ---
+# macOS ships a SIP-protected system perl whose site dir isn't writable, so
+# cpanm falls back to ~/perl5. These exports (the standard local::lib block,
+# emitted here inline so no local::lib module is required) put that tree on
+# PATH + @INC — binaries like msgconvert and their modules resolve, and future
+# cpanm builds keep installing into ~/perl5.
+if [ -d "$HOME/perl5/lib/perl5" ]; then
+  export PATH="$HOME/perl5/bin${PATH:+:$PATH}"
+  export PERL5LIB="$HOME/perl5/lib/perl5${PERL5LIB:+:$PERL5LIB}"
+  export PERL_LOCAL_LIB_ROOT="$HOME/perl5${PERL_LOCAL_LIB_ROOT:+:$PERL_LOCAL_LIB_ROOT}"
+  export PERL_MB_OPT="--install_base \"$HOME/perl5\""
+  export PERL_MM_OPT="INSTALL_BASE=$HOME/perl5"
+fi
+
 # --- Starship prompt (OS-appearance aware) ---
 # Swap STARSHIP_CONFIG before each prompt so the theme flips automatically when
 # macOS appearance changes — no new shell needed.
