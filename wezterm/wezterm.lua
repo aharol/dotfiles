@@ -90,7 +90,7 @@ wezterm.on("window-config-reloaded", function(window, _pane)
 end)
 
 config.font = wezterm.font("Hack Nerd Font Mono")
-config.font_size = 11.5
+config.font_size = 11
 
 -- Force GPU-accelerated renderer (OpenGL → Metal on macOS).
 -- WebGpu leaves white artifacts in newly exposed areas on window resize.
@@ -119,11 +119,11 @@ local act = wezterm.action
 
 -- Key bindings
 config.keys = {
-	-- Shift+Enter sends a newline
+	-- Encode Shift+Enter as Alt+Enter so it bypasses tmux's Ctrl-J pane binding.
 	{
 		key = "Enter",
 		mods = "SHIFT",
-		action = act.SendString("\n"),
+		action = act.SendString("\x1b\r"),
 	},
 	-- Cmd+N: fresh LOCAL shell window, bypassing the persistent mux.
 	{
