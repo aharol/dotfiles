@@ -286,3 +286,6 @@ pdfpc() {
 # (read as defined-at-all) turns mouse reporting off and restores normal mouse
 # select/copy. Trade-off: no click-to-open paths, scroll via the terminal.
 export CLAUDE_CODE_DISABLE_MOUSE=1
+
+# kimi-code
+export PATH="/Users/artharol/.kimi-code/bin:$PATH"
