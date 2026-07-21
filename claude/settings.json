@@ -1,6 +1,6 @@
 {
   "skillListingBudgetFraction": 0.02,
-  "model": "opus[1m]",
+  "model": "claude-fable-5[1m]",
   "enabledPlugins": {
     "lua-lsp@claude-plugins-official": true,
     "frontend-design@claude-plugins-official": true,
