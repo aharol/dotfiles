@@ -119,11 +119,13 @@ local act = wezterm.action
 
 -- Key bindings
 config.keys = {
-	-- Encode Shift+Enter as Alt+Enter so it bypasses tmux's Ctrl-J pane binding.
+	-- Encode Shift+Enter as kitty-protocol CSI-u (ESC[13;2u). tmux has
+	-- extended-keys on with csi-u format, so it parses and forwards this to the
+	-- pane; modern TUIs (Kimi, Codex, ...) decode it as Shift+Enter → newline.
 	{
 		key = "Enter",
 		mods = "SHIFT",
-		action = act.SendString("\x1b\r"),
+		action = act.SendString("\x1b[13;2u"),
 	},
 	-- Cmd+N: fresh LOCAL shell window, bypassing the persistent mux.
 	{
