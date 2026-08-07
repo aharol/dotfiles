@@ -165,6 +165,33 @@ config.keys = {
 	-- },
 }
 
+-- Shift bypasses the application's mouse reporting (bypass_mouse_reporting_modifiers),
+-- so a Shift+drag inside tmux is WezTerm's own selection rather than tmux's. The
+-- defaults have no `SHIFT Drag` binding, and `SHIFT Up` uses the OrOpenLink variant
+-- which treats a dragless press as a click — so the shift path never reliably lands
+-- on the clipboard the way a plain tmux-captured drag does (tmux.conf binds
+-- MouseDragEnd1Pane to pbcopy). Bind the shift path explicitly so both routes copy.
+--
+-- Duplicated for mouse_reporting true/false: the bypass case is the one that matters
+-- under tmux, the plain case keeps a bare shell consistent. `SHIFT Down` is left on
+-- its default (ExtendSelectionToMouseCursor) so Shift+click still extends a selection.
+local shift_select_bindings = {}
+for _, reporting in ipairs({ false, true }) do
+	table.insert(shift_select_bindings, {
+		event = { Drag = { streak = 1, button = "Left" } },
+		mods = "SHIFT",
+		action = act.ExtendSelectionToMouseCursor("Cell"),
+		mouse_reporting = reporting,
+	})
+	table.insert(shift_select_bindings, {
+		event = { Up = { streak = 1, button = "Left" } },
+		mods = "SHIFT",
+		action = act.CompleteSelection("ClipboardAndPrimarySelection"),
+		mouse_reporting = reporting,
+	})
+end
+config.mouse_bindings = shift_select_bindings
+
 -- config.window_background_opacity = 0.8
 -- config.macos_window_background_blur = 10
 
