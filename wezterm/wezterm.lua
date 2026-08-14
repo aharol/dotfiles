@@ -100,7 +100,29 @@ config.front_end = "OpenGL"
 -- a usable path even when names contain spaces or shell metacharacters.
 config.quote_dropped_files = "Posix"
 
-config.enable_tab_bar = false
+config.enable_tab_bar = true
+
+-- Uniform tab widths. Tabs are sized to their title, so pad/truncate every
+-- title to the same column count and draw the bar in the terminal's monospace
+-- font, otherwise equal character counts still render as unequal pixels.
+local TAB_WIDTH = 24
+
+config.tab_max_width = TAB_WIDTH
+config.window_frame = {
+	font = wezterm.font("Hack Nerd Font Mono"),
+	font_size = 11,
+}
+
+wezterm.on("format-tab-title", function(tab, _tabs, _panes, _conf, _hover, _max_width)
+	local title = tab.tab_title
+	if not title or title == "" then
+		title = tab.active_pane.title
+	end
+	title = wezterm.truncate_right(title, TAB_WIDTH - 2)
+	local pad = TAB_WIDTH - 2 - wezterm.column_width(title)
+	local left = math.floor(pad / 2)
+	return " " .. string.rep(" ", left) .. title .. string.rep(" ", pad - left) .. " "
+end)
 
 config.initial_rows = 48
 config.initial_cols = 150
