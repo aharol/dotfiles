@@ -9,7 +9,8 @@
     "claude-code-setup@claude-plugins-official": true,
     "superpowers@claude-plugins-official": true,
     "playground@claude-plugins-official": true,
-    "playwright@claude-plugins-official": true
+    "playwright@claude-plugins-official": true,
+    "superdesign@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "addy-agent-skills": {
