@@ -10,6 +10,7 @@ repo, changes are live immediately.
 ├── shell/        zsh login + interactive + aliases
 ├── prompt/       Starship prompt (dual: dark + light, OS-appearance synced)
 ├── tmux/         tmux config (catppuccin, vim-tmux-navigator, resurrect/continuum)
+├── obsidian/     Vault CSS snippets (manual install; see below)
 ├── wezterm/      WezTerm Lua config (Catppuccin Mocha/Latte)
 ├── iterm2/       iTerm2 dynamic profiles (placeholder)
 ├── nvim/         AstroNvim user config
@@ -79,6 +80,20 @@ $EDITOR ~/.env
   appearance via a `precmd` autocommand in `lua/polish.lua`.
 - **GitHub CLI** — `gh` config with `co = pr checkout` alias.
 - **Claude Code** — settings (`effortLevel: high`, plugins).
+
+## Obsidian layout
+
+`obsidian/snippets/width.css` aligns Reading mode and Live Preview: a
+1150px page, list indentation and spacing, table layout, and prose wrapping.
+It does not include notes or a theme.
+
+Copy it into your vault's `.obsidian/snippets/` directory, then enable
+**Settings → Appearance → CSS snippets → width**. Back up any existing
+`width.css` before replacing it. Reopen the note after enabling the snippet
+so Obsidian recalculates wrapped-line indentation.
+
+This is a manual snapshot, not a symlink installed by `install.sh`. Copy future
+changes back into this repository before committing them.
 
 ## Light/dark theming
 

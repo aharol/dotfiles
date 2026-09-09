@@ -1,0 +1,225 @@
+/* Reading / Live Preview parity.
+   One centred page, not separately centred lines and widgets.
+   Keep selectors out of embedded notes, property inputs and table-cell
+   editors. Do not hide gutters, reset metadata descendants, or use
+   margins on CodeMirror lines (its height/selection model uses padding).
+   Source mode keeps native source formatting. */
+
+body {
+  --vault-page-width: 1150px;
+  --vault-paragraph-gap: 1rem;
+  --vault-heading-gap: 1.6rem;
+  --vault-heading-after: 0.6rem;
+  --vault-properties-gap: 1.2rem;
+  --line-height-normal: 1.5;
+  --line-height-tight: 1.3;
+  --p-spacing: var(--vault-paragraph-gap);
+  --p-spacing-empty: 0rem;
+  --list-spacing: 0.15rem;
+  --list-indent: 2em;
+  --list-indent-nested: 2em;
+  --list-marker-align: right;
+  --heading-spacing: var(--vault-heading-gap);
+  --blockquote-border-thickness: 2px;
+}
+
+/* Apply to note panes only; both scroll surfaces retain --file-margins.
+   This also works with Obsidian's "Readable line length" switched off. */
+.workspace-leaf-content[data-type="markdown"] > .view-content {
+  --file-line-width: var(--vault-page-width);
+  --table-line-height: var(--line-height-normal);
+}
+
+.workspace-leaf-content[data-type="markdown"] > .view-content > .markdown-reading-view > .markdown-preview-view > .markdown-preview-sizer,
+.workspace-leaf-content[data-type="markdown"] > .view-content > .markdown-source-view.mod-cm6 > .cm-editor > .cm-scroller > .cm-sizer {
+  width: 100%;
+  max-width: var(--vault-page-width);
+  margin-inline: auto;
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+/* The title, properties and prose now share the same parent edge.
+   Leave property rows, collapsed states and inputs to Obsidian. */
+.workspace-leaf-content[data-type="markdown"] > .view-content > .markdown-reading-view > .markdown-preview-view > .markdown-preview-sizer > .metadata-container,
+.workspace-leaf-content[data-type="markdown"] > .view-content > .markdown-source-view.mod-cm6 > .cm-editor > .cm-scroller > .cm-sizer > .metadata-container {
+  margin-block-end: var(--vault-properties-gap);
+}
+
+/* Scope prose spacing to the main reading page, not rendered content
+   inside callouts, table cells or embedded notes. Preserve reading's
+   existing paragraph/heading rhythm as the visual reference. */
+.workspace-leaf-content[data-type="markdown"] > .view-content > .markdown-reading-view > .markdown-preview-view > .markdown-preview-sizer > div > p {
+  margin-block: 0 var(--vault-paragraph-gap);
+}
+
+.workspace-leaf-content[data-type="markdown"] > .view-content > .markdown-reading-view > .markdown-preview-view > .markdown-preview-sizer > div > :is(h1, h2, h3, h4, h5, h6) {
+  margin-block: var(--vault-heading-gap) var(--vault-heading-after);
+  line-height: var(--line-height-tight);
+}
+
+.workspace-leaf-content[data-type="markdown"] > .view-content > .markdown-reading-view > .markdown-preview-view > .markdown-preview-sizer > div > :is(ul, ol) {
+  padding-inline-start: var(--list-indent);
+  margin-block: 0 var(--vault-paragraph-gap);
+}
+
+/* CodeMirror's break-spaces counts trailing spaces against the line
+   width. That can wrap a word early despite identical fonts and widths.
+   pre-wrap preserves typed whitespace but lets trailing spaces hang,
+   matching Reading's word breaks without resizing the page. */
+.workspace-leaf-content[data-type="markdown"] > .view-content > .markdown-source-view.mod-cm6.is-live-preview > .cm-editor > .cm-scroller > .cm-sizer > .cm-contentContainer > .cm-content > .cm-line:not(.HyperMD-codeblock, .HyperMD-table-row) {
+  white-space: pre-wrap;
+}
+
+/* Main Live Preview lines ONLY. No fixed heights or zero-sized fonts:
+   blank lines remain selectable and the caret keeps a usable height.
+   Exclude blank code/quote/list lines; those carry semantic indentation. */
+.workspace-leaf-content[data-type="markdown"] > .view-content > .markdown-source-view.mod-cm6.is-live-preview > .cm-editor > .cm-scroller > .cm-sizer > .cm-contentContainer > .cm-content > .cm-line:has(> br:only-child):not(.HyperMD-codeblock, .HyperMD-quote, .HyperMD-list-line, .HyperMD-header) {
+  line-height: var(--vault-paragraph-gap);
+  min-height: var(--vault-paragraph-gap);
+}
+
+/* A preceding blank line already supplies the paragraph gap. Padding,
+   not margins, supplies the remaining space above the heading. */
+.workspace-leaf-content[data-type="markdown"] > .view-content > .markdown-source-view.mod-cm6.is-live-preview > .cm-editor > .cm-scroller > .cm-sizer > .cm-contentContainer > .cm-content > .HyperMD-header {
+  line-height: var(--line-height-tight);
+  padding-block: max(0px, calc(var(--vault-heading-gap) - var(--vault-paragraph-gap))) 0;
+}
+
+.workspace-leaf-content[data-type="markdown"] > .view-content > .markdown-source-view.mod-cm6.is-live-preview > .cm-editor > .cm-scroller > .cm-sizer > .cm-contentContainer > .cm-content > .HyperMD-header:first-child {
+  padding-block-start: var(--vault-heading-gap);
+}
+
+.workspace-leaf-content[data-type="markdown"] > .view-content > .markdown-source-view.mod-cm6.is-live-preview > .cm-editor > .cm-scroller > .cm-sizer > .cm-contentContainer > .cm-content > .HyperMD-header + .cm-line:has(> br:only-child):not(.HyperMD-codeblock, .HyperMD-quote, .HyperMD-list-line, .HyperMD-header) {
+  line-height: var(--vault-heading-after);
+  min-height: var(--vault-heading-after);
+}
+
+/* Reading collapses the properties' bottom margin with the first
+   heading's top margin. The editor is flex-based, so subtract that gap
+   explicitly when a visible properties block precedes the first heading. */
+.workspace-leaf-content[data-type="markdown"] > .view-content > .markdown-source-view.mod-cm6.is-live-preview.show-properties > .cm-editor > .cm-scroller > .cm-sizer:has(> .metadata-container:not(.mod-error):not([data-property-count="0"])) > .cm-contentContainer > .cm-content > .HyperMD-header:first-child {
+  padding-block-start: max(0px, calc(var(--vault-heading-gap) - var(--vault-properties-gap)));
+}
+
+/* A YAML widget followed by a blank source line already supplies the
+   first heading's separation. Reading collapses the properties margin;
+   Live Preview must not add a second heading pad to that blank line. */
+.workspace-leaf-content[data-type="markdown"] > .view-content > .markdown-source-view.mod-cm6.is-live-preview.show-properties > .cm-editor > .cm-scroller > .cm-sizer:has(> .cm-contentContainer > .cm-content > [contenteditable="false"]:first-child + .cm-line > br:only-child):has(> .cm-contentContainer > .cm-content > [contenteditable="false"]:first-child + .cm-line + .HyperMD-header) > .metadata-container:not(.mod-error):not([data-property-count="0"]) {
+  margin-block-end: var(--vault-paragraph-gap);
+}
+
+.workspace-leaf-content[data-type="markdown"] > .view-content > .markdown-source-view.mod-cm6.is-live-preview.show-properties > .cm-editor > .cm-scroller > .cm-sizer:has(> .metadata-container:not(.mod-error):not([data-property-count="0"])) > .cm-contentContainer > .cm-content > [contenteditable="false"]:first-child + .cm-line:has(> br:only-child) + .HyperMD-header {
+  padding-block-start: 0;
+}
+
+/* Position the rule inside its native row, without resizing the row.
+   This matches Reading's gap on either side and leaves selection intact. */
+.workspace-leaf-content[data-type="markdown"] > .view-content > .markdown-source-view.mod-cm6.is-live-preview > .cm-editor > .cm-scroller > .cm-sizer > .cm-contentContainer > .cm-content > .hr.cm-line > hr {
+  position: relative;
+  inset-block-start: calc(var(--vault-paragraph-gap) - (1lh - var(--hr-thickness)) / 2);
+}
+
+/* Adjacent list items share the reading rhythm. Never override the
+   editor's per-level padding-inline-start or negative text-indent. */
+.workspace-leaf-content[data-type="markdown"] > .view-content > .markdown-reading-view > .markdown-preview-view > .markdown-preview-sizer > div :is(ul, ol) > li {
+  margin-block: 0;
+  padding-block: 0;
+}
+
+.workspace-leaf-content[data-type="markdown"] > .view-content > .markdown-reading-view > .markdown-preview-view > .markdown-preview-sizer > div :is(ul, ol) > li + li {
+  margin-block-start: var(--list-spacing);
+}
+
+/* Set both sides explicitly: themes differ in native item padding.
+   One inter-item gap, not padding above + below + an extra margin. */
+.workspace-leaf-content[data-type="markdown"] > .view-content > .markdown-source-view.mod-cm6.is-live-preview > .cm-editor > .cm-scroller > .cm-sizer > .cm-contentContainer > .cm-content > .HyperMD-list-line {
+  padding-block: 0;
+}
+
+.workspace-leaf-content[data-type="markdown"] > .view-content > .markdown-source-view.mod-cm6.is-live-preview > .cm-editor > .cm-scroller > .cm-sizer > .cm-contentContainer > .cm-content > .HyperMD-list-line + .HyperMD-list-line {
+  padding-block-start: var(--list-spacing);
+}
+
+/* Entering a child list has no inter-item margin in Reading mode. */
+.workspace-leaf-content[data-type="markdown"] > .view-content > .markdown-source-view.mod-cm6.is-live-preview > .cm-editor > .cm-scroller > .cm-sizer > .cm-contentContainer > .cm-content > :is(.HyperMD-list-line-1 + .HyperMD-list-line-2, .HyperMD-list-line-2 + .HyperMD-list-line-3, .HyperMD-list-line-3 + .HyperMD-list-line-4, .HyperMD-list-line-4 + .HyperMD-list-line-5, .HyperMD-list-line-5 + .HyperMD-list-line-6) {
+  padding-block-start: 0;
+}
+
+/* Size the MARKER, not the line. Obsidian measures this box and computes
+   its own hanging indent, so wrapped text follows the same edge.
+   Reading uses an outer --list-indent plus a native 3ch marker gutter.
+   A fixed marker box also keeps 1. and 10. aligned. */
+.workspace-leaf-content[data-type="markdown"] > .view-content > .markdown-source-view.mod-cm6.is-live-preview {
+  --vault-list-text-inset: calc(var(--list-indent) + 3ch);
+}
+
+.workspace-leaf-content[data-type="markdown"] > .view-content > .markdown-source-view.mod-cm6.is-live-preview > .cm-editor > .cm-scroller > .cm-sizer > .cm-contentContainer > .cm-content > .HyperMD-list-line:not(.HyperMD-task-line) > :is(.cm-formatting-list-ol, .cm-formatting-list-ul) {
+  display: inline-block;
+  width: var(--vault-list-text-inset);
+  padding-inline: 0;
+  text-align: end;
+}
+
+.workspace-leaf-content[data-type="markdown"] > .view-content > .markdown-source-view.mod-cm6.is-live-preview > .cm-editor > .cm-scroller > .cm-sizer > .cm-contentContainer > .cm-content > .HyperMD-list-line:not(.HyperMD-task-line) > .cm-hmd-list-indent > .cm-indent-spacing {
+  display: inline-block;
+  width: var(--list-indent);
+}
+
+/* Leave source-line margins and table separators to the editor.
+   Do not collapse a source line to zero height or shift list lines with
+   margins: static HTML checks do not cover CodeMirror's virtual layout. */
+
+/* Tables: scope to note tables, not every table in the application.
+   Retain the editor widget's native padding and negative margin: they
+   reserve room for drag handles while aligning the actual table with
+   the prose. Constrain its INNER wrapper instead of clipping controls. */
+.workspace-leaf-content[data-type="markdown"] > .view-content > .markdown-source-view.mod-cm6 > .cm-editor > .cm-scroller > .cm-sizer > .cm-contentContainer > .cm-content > .cm-table-widget > .table-wrapper {
+  width: 100%;
+  min-width: 0;
+}
+
+.workspace-leaf-content[data-type="markdown"] > .view-content > .markdown-reading-view > .markdown-preview-view > .markdown-preview-sizer > .el-table {
+  overflow-x: auto;
+}
+
+.workspace-leaf-content[data-type="markdown"] > .view-content > .markdown-reading-view > .markdown-preview-view > .markdown-preview-sizer > .el-table table,
+.workspace-leaf-content[data-type="markdown"] > .view-content > .markdown-source-view.mod-cm6 > .cm-editor > .cm-scroller > .cm-sizer > .cm-contentContainer > .cm-content > .cm-table-widget > .table-wrapper > table {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  table-layout: auto;
+}
+
+/* Live Preview reserves space for table controls plus a source separator.
+   Match that safe gap in Reading rather than collapsing editor lines. */
+.workspace-leaf-content[data-type="markdown"] > .view-content > .markdown-reading-view > .markdown-preview-view > .markdown-preview-sizer > .el-table table {
+  margin-block-end: calc(2 * var(--vault-paragraph-gap));
+}
+
+/* Three or more columns fit the page rather than losing the right edge.
+   Long unbroken values wrap; one/two-column tables remain intrinsic. */
+.workspace-leaf-content[data-type="markdown"] > .view-content > .markdown-reading-view > .markdown-preview-view > .markdown-preview-sizer > .el-table table:has(th:nth-child(3)),
+.workspace-leaf-content[data-type="markdown"] > .view-content > .markdown-source-view.mod-cm6 > .cm-editor > .cm-scroller > .cm-sizer > .cm-contentContainer > .cm-content > .cm-table-widget > .table-wrapper > table:has(th:nth-child(3)) {
+  table-layout: fixed;
+}
+
+.workspace-leaf-content[data-type="markdown"] > .view-content > .markdown-reading-view > .markdown-preview-view > .markdown-preview-sizer > .el-table :is(th, td),
+.workspace-leaf-content[data-type="markdown"] > .view-content > .markdown-source-view.mod-cm6 > .cm-editor > .cm-scroller > .cm-sizer > .cm-contentContainer > .cm-content > .cm-table-widget > .table-wrapper > table :is(th, td) {
+  min-width: 0;
+  max-width: none;
+  vertical-align: top;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+/* Obsidian gives cell editors overflow-wrap:normal; permit long URLs to
+   wrap there too, without touching their dimensions or line spacing. */
+.workspace-leaf-content[data-type="markdown"] > .view-content > .markdown-source-view.mod-cm6 > .cm-editor > .cm-scroller > .cm-sizer > .cm-contentContainer > .cm-content > .cm-table-widget .cm-content.cm-lineWrapping {
+  overflow-wrap: anywhere;
+}
+
+.workspace-leaf-content[data-type="markdown"] > .view-content > .markdown-reading-view > .markdown-preview-view > .markdown-preview-sizer > .el-table table:has(th:nth-child(5)) :is(th, td):first-child,
+.workspace-leaf-content[data-type="markdown"] > .view-content > .markdown-source-view.mod-cm6 > .cm-editor > .cm-scroller > .cm-sizer > .cm-contentContainer > .cm-content > .cm-table-widget > .table-wrapper > table:has(th:nth-child(5)) :is(th, td):first-child {
+  width: 14%;
+}
